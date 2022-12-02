@@ -1,0 +1,2 @@
+try pypy
+try cProfile

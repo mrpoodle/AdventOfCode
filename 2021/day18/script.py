@@ -25,18 +25,20 @@ def split(number):
 
 def combine(number, second_part):
     if isinstance(second_part, int):
-        return split(number + second_part)
+        try:
+            return split(number + second_part)
+        except:
+            print(number, second_part)
+
     if isinstance(second_part, list):
         return [combine(number, second_part[0]), second_part[1]]
 
 
 def validate(number, level=1):
-    if level == 5:
+    if level > 4:
         if isinstance(number, list):
             return (
-                number[0],
-                0,
-                number[1]
+                validate(number, level=0)
             )
         return (
             0,
@@ -46,6 +48,7 @@ def validate(number, level=1):
     if isinstance(number, list):
         n_1 = validate(number[0], level=level+1)
         n_2 = validate(number[1], level=level+1)
+        print(n_1, n_2)
         return (
             n_1[0],
             [combine(n_2[0], n_1[1]), combine(n_1[2], n_2[1])],
