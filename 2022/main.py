@@ -69,11 +69,6 @@ def day03(filename):
     def get_priority_2(lines):
         common = list(set(lines[0]).intersection(lines[1]))
         common = list(set(common).intersection(lines[2]))
-        if len(common) > 1:
-            print(lines)
-            print(common)
-            print("MORE THAN ONE")
-            exit()
         return map2number(common[0])
 
     def solution_1():
@@ -102,6 +97,30 @@ def day03(filename):
     print(f"day 03, part 1: {solution_2()}")
 
 
+def day04(filename):
+    def make_set(range_string):
+        start, end = range_string.split("-")
+        range_set = set(range(int(start), int(end) + 1))
+        return range_set
+
+    counter_1 = 0
+    counter_2 = 0
+    with open(filename) as f:
+        for line in f:
+            a, b = line.strip("\n").split(",")
+            a_range = make_set(a)
+            b_range = make_set(b)
+            if a_range.issubset(b_range) or b_range.issubset(a_range):
+                counter_1 += 1
+                counter_2 += 1
+            elif a_range.intersection(b_range):
+                counter_2 += 1
+
+    print(f"day 03, part 1: {counter_1}")
+    print(f"day 03, part 2: {counter_2}")
+
+
 # day01("2022/day01.txt")
 # day02("2022/day02.txt")
-day03("2022/day03.txt")
+# day03("2022/day03.txt")
+day04("2022/day04.txt")
