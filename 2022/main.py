@@ -116,11 +116,71 @@ def day04(filename):
             elif a_range.intersection(b_range):
                 counter_2 += 1
 
-    print(f"day 03, part 1: {counter_1}")
-    print(f"day 03, part 2: {counter_2}")
+    print(f"day 04, part 1: {counter_1}")
+    print(f"day 04, part 2: {counter_2}")
+
+
+def day05(filename):
+    def process(part):
+        stacks = {}
+        with open(filename) as f:
+            for line in f:
+                line = line.strip("\n")
+                if line == "":
+                    break
+                for i, column in enumerate(range(1, len(line), 4)):
+                    if not line[column].isupper():
+                        continue
+                    if i+1 in stacks:
+                        stacks[i+1].insert(0, line[column])
+                    else:
+                        stacks[i+1] = [line[column]]
+            # print(stacks)
+
+            for line in f:
+                words = line.strip("\n").split(" ")
+                if words[0] != "move":
+                    continue
+                _n_ = int(words[1])
+                _from_ = int(words[3])
+                _to_ = int(words[5])
+                if part == 1:
+                    for _ in range(_n_):
+                        stacks[_to_].append(stacks[_from_].pop())
+                if part == 2:
+                    stacks[_to_] += stacks[_from_][-_n_:]
+                    del stacks[_from_][-_n_:]
+            # print(stacks)
+
+            return "".join([stacks[i+1][-1] for i in range(len(stacks))])
+
+    print(f"day 05, part 1: {process(1)}")
+    print(f"day 05, part 2: {process(2)}")
+
+
+def day06(filename):
+    with open(filename) as f:
+        for line in f:
+            window_1 = " " * 4
+            window_2 = " " * 14
+            for i, character in enumerate(line):
+                window_1 = window_1[-3:] + character
+                if " " not in window_1 and len(set(window_1)) == 4:
+                    solution_1 = i+1
+                    break
+            for i, character in enumerate(line):
+                window_2 = window_2[-13:] + character
+                if " " not in window_2 and len(set(window_2)) == 14:
+                    solution_2 = i+1
+                    break
+
+    print(f"day 06, part 1: {solution_1}")
+    print(f"day 06, part 2: {solution_2}")
 
 
 # day01("2022/day01.txt")
 # day02("2022/day02.txt")
 # day03("2022/day03.txt")
-day04("2022/day04.txt")
+# day04("2022/day04.txt")
+# day05("2022/day05.txt")
+day06("2022/day06.txt")
