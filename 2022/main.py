@@ -368,6 +368,68 @@ def day09(filename):
     print(f"day 09, part 2: {solution_2}")
 
 
+def day10(filename):
+    solution_1 = 0
+    cycle = 0
+    value = 1
+
+    def cycle_1(cycle, solution):
+        cycle += 1
+        if cycle in range(20, 221, 40):
+            solution += cycle*value
+        return cycle, solution
+
+    with open(filename) as f:
+        for line in f:
+            line = line.strip("\n")
+            cycle, solution_1 = cycle_1(cycle, solution_1)
+            
+            if line != "noop":
+                _, number = line.split(" ")
+                cycle, solution_1 = cycle_1(cycle, solution_1)
+                value += int(number)
+
+    print(f"day 10, part 1: {solution_1}")
+    print("day 10, part 2:")
+
+    def cycle_2(cycle):
+        cycle += 1
+        if cycle in range(0, 241, 40):
+            if 39 in [offset, offset + 1, offset + 2]:
+                print("#")
+            else:
+                print(" ")
+        elif cycle%40 in [offset, offset + 1, offset + 2]:
+            print("#", end="")
+        else:
+            print(" ", end="")
+
+        return cycle
+
+    cycle = 0
+    offset = 1
+    with open(filename) as f:
+        for line in f:
+            line = line.strip("\n")
+            cycle = cycle_2(cycle)
+
+            if line != "noop":
+                _, number = line.split(" ")
+                cycle = cycle_2(cycle)
+                offset += int(number)
+
+
+def day11(filename):
+    solution_1 = 0
+    solution_2 = 0
+    with open(filename) as f:
+        for line in f:
+            continue
+
+    print(f"day 11, part 1: {solution_1}")
+    print(f"day 11, part 2: {solution_2}")
+
+
 # day01("2022/day01.txt")
 # day02("2022/day02.txt")
 # day03("2022/day03.txt")
@@ -376,7 +438,9 @@ def day09(filename):
 # day06("2022/day06.txt")
 # day07("2022/day07.txt")
 # day08("2022/day08.txt")
-day09("2022/day09.txt")
+# day09("2022/day09.txt")
+# day10("2022/day10.txt")
+day11("2022/day11.txt")
 
 
 def dayXX(filename):
