@@ -1,0 +1,13 @@
+lines = ["anb1bsk2jdk","1jsks0djd5sbsj4nsj2jsjs","8"]
+out = 0
+for l in lines:
+	first = None
+	last = None
+	for x in l:
+		if x.isdigit():
+			last = x
+			if first:
+				continue
+			first=x
+	out += int(first+last)
+print(out)
