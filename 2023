@@ -1,4 +1,4 @@
-lines = ["anb1bsk2jdk","1jsks0djd5sbsj4nsj2jsjs","8"]
+lines = [line.strip("\n") for line in open("day01.txt")]
 out = 0
 for l in lines:
 	first = None
