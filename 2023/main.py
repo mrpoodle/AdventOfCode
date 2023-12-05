@@ -177,5 +177,109 @@ def day03_2():
 
 	return out
 
+def day04_1():
+	lines = [[set([int(number)
+			for number in numbers.split()])
+				for numbers in line.strip("\n").split(":")[1].strip(" ").split(" | ")]
+					for line in open("day04.txt")]
+	out = 0
+	for line in lines:
+		points = 2**(len(line[0] & line[1])-1)
+		if points >= 1:
+			out += points
+	return out
 
-print(day02_2())
+def day04_2():
+	lines = [[set([int(number)
+			for number in numbers.split()])
+				for numbers in line.strip("\n").split(":")[1].strip(" ").split(" | ")]
+					for line in open("day04.txt")]
+
+	cards = [1 for x in lines]
+	print(cards)
+	for i, line in enumerate(lines):
+		points = len(line[0] & line[1])
+		for x in range(points):
+			try:
+				cards[i+x+1] += cards[i]
+			except IndexError:
+				pass
+	print(cards)
+	out = sum(cards)
+	return out
+
+### for day 5
+def find_location(seed, maps):
+	for step in maps:
+		seed = find_next(seed, step)
+	return seed
+
+def find_next(seed, step):
+	for my_map in step:
+		if seed >= my_map[1] and seed < my_map[1]+my_map[2]:
+			seed = my_map[0] + (seed - my_map[1])
+			return seed
+	return seed
+
+def day05_1():
+	chunks = "\n".join([line.strip("\n") for line in open("day05.tst")])
+	maps = []
+	minimum = []
+	maximum = []
+	for chunk in chunks.split("\n\n"):
+		if chunk.startswith("seeds:"):
+			seeds = [int(seed) for seed in chunk.removeprefix("seeds: ").split(" ")]
+			continue
+		my_map = chunk.split("\n")
+		maps.append([[int(num) for num in string.split()] for string in my_map[1:]])
+
+	out = None
+	for seed in seeds:
+		seed=find_location(seed, maps)
+		if out == None or seed < out:
+			out = seed
+	return out
+
+def day05_2():
+	chunks = "\n".join([line.strip("\n") for line in open("day05.txt")])
+	maps = []
+	length = 0
+	maximum = 0
+	for chunk in chunks.split("\n\n"):
+		if chunk.startswith("seeds:"):
+			seeds=[]
+			numbers = [int(x) for x in chunk.removeprefix("seeds: ").split(" ")]
+			for first, second in zip(numbers[::2], numbers[1::2]):
+				seeds.append(range(first, first+second))
+				if first+second>maximum:
+					maximum=first+second
+				length+=second
+			continue
+		my_map = chunk.split("\n")
+		maps.append([[int(num) for num in string.split()] for string in my_map[1:]])
+
+	out = None
+	counter = 0
+
+	#for seed_range in seeds:
+	#	for seed in seed_range:
+	#		seed=find_location(seed, maps)
+	#		if out == None or seed < out:
+	#			out = seed
+	#		counter += 1
+	#		print(counter/length*100, "%    ", out, " "*30, end="\r")
+			
+	print(maximum)
+	for seed_range in [range(maximum)]:
+		for seed in seed_range:
+			seed=find_location(seed, maps)
+			if out == None or seed < out:
+				out = seed
+			counter += 1
+			print(counter/maximum*100, "%    ", out, " "*30, end="\r")
+			
+	print()
+	return out
+
+
+print(day05_2())
