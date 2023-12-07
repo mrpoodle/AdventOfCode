@@ -1,6 +1,7 @@
+import click
 
-def day01_1():
-	lines = [line.strip("\n") for line in open("day01.txt")]
+def day01_1(input_file):
+	lines = [line.strip("\n") for line in open(input_file)]
 	out = 0
 	for l in lines:
 		first = None
@@ -14,7 +15,7 @@ def day01_1():
 		out += int(first+last)
 	return out
 
-def day01_2():
+def day01_2(input_file):
 	numbers = {
 		"one": "one1one",
 		"two": "two2two",
@@ -26,7 +27,7 @@ def day01_2():
 		"eight": "eight8eight",
 		"nine": "nine9nine"
 	}
-	lines = [line.strip("\n") for line in open("day01.txt")]
+	lines = [line.strip("\n") for line in open(input_file)]
 	out = 0
 	for l in lines:
 		first = None
@@ -42,7 +43,7 @@ def day01_2():
 		out += int(first+last)
 	return out
 
-def day02_1():
+def day02_1(input_file):
 	balls = {
 		"red": 12,
 		"green": 13,
@@ -61,14 +62,14 @@ def day02_1():
 		return True
 
 	out = 0
-	lines = [line.strip("\n") for line in open("day02.txt")]
+	lines = [line.strip("\n") for line in open(input_file)]
 	for line in lines:
 		id, turns = line.removeprefix("Game ").split(":")
 		out += int(id) if test_game(turns) else 0
 	return out
 
 
-def day02_2():
+def day02_2(input_file):
 
 	def test_game(turns):
 		balls = {
@@ -87,16 +88,16 @@ def day02_2():
 		return balls["red"]*balls["green"]*balls["blue"]
 
 	out = 0
-	lines = [line.strip("\n") for line in open("day02.txt")]
+	lines = [line.strip("\n") for line in open(input_file)]
 	for line in lines:
 		id, turns = line.removeprefix("Game ").split(":")
 		out += test_game(turns)
 	return out
 
 
-def day03_1():
+def day03_1(input_file):
 	"""every number adjacent to a symbol in the matrix should be added to the sum"""
-	lines = [line.strip("\n") for line in open("day03.txt")]
+	lines = [line.strip("\n") for line in open(input_file)]
 
 	def check_sourrounding(x, y):
 		length = 1
@@ -129,9 +130,9 @@ def day03_1():
 	return out
 
 
-def day03_2():
+def day03_2(input_file):
 	"""only two numbers ajacent to a * should be multiplied and added to the sum"""
-	lines = [line.strip("\n") for line in open("day03.txt")]
+	lines = [line.strip("\n") for line in open(input_file)]
 	out = 0
 
 	def find_number(x, y):
@@ -177,11 +178,11 @@ def day03_2():
 
 	return out
 
-def day04_1():
+def day04_1(input_file):
 	lines = [[set([int(number)
 			for number in numbers.split()])
 				for numbers in line.strip("\n").split(":")[1].strip(" ").split(" | ")]
-					for line in open("day04.txt")]
+					for line in open(input_file)]
 	out = 0
 	for line in lines:
 		points = 2**(len(line[0] & line[1])-1)
@@ -189,11 +190,11 @@ def day04_1():
 			out += points
 	return out
 
-def day04_2():
+def day04_2(input_file):
 	lines = [[set([int(number)
 			for number in numbers.split()])
 				for numbers in line.strip("\n").split(":")[1].strip(" ").split(" | ")]
-					for line in open("day04.txt")]
+					for line in open(input_file)]
 
 	cards = [1 for x in lines]
 	print(cards)
@@ -221,8 +222,8 @@ def find_next(seed, step):
 			return seed
 	return seed
 
-def day05_1():
-	chunks = "\n".join([line.strip("\n") for line in open("day05.tst")])
+def day05_1(input_file):
+	chunks = "\n".join([line.strip("\n") for line in open(input_file)])
 	maps = []
 	minimum = []
 	maximum = []
@@ -240,8 +241,8 @@ def day05_1():
 			out = seed
 	return out
 
-def day05_2():
-	chunks = "\n".join([line.strip("\n") for line in open("day05.txt")])
+def day05_2(input_file):
+	chunks = "\n".join([line.strip("\n") for line in open(input_file)])
 	maps = []
 	length = 0
 	maximum = 0
@@ -281,5 +282,200 @@ def day05_2():
 	print()
 	return out
 
+def day06_1(input_file):
+	lines = [line.strip("\n") for line in open(input_file)]
+	time_dist = zip(
+		[int(number) for number in lines[0].split()[1:]], 
+		[int(number) for number in lines[1].split()[1:]]
+	)
+	score = 1
+	for round in time_dist:
+		wins = 0
+		for i in range(round[0]):
+			travelled = i*(round[0]-i)
+			if travelled > round[1]:
+				wins += 1
+		score *= wins
+	out = score
+	return out
 
-print(day05_2())
+def day06_2(input_file):
+	lines = [line.strip("\n") for line in open(input_file)]
+	time = int("".join([number for number in lines[0].split()[1:]]))
+	dist = int("".join([number for number in lines[1].split()[1:]]))
+
+	step = time/2
+	pointer = step
+
+	while True:
+		travelled = pointer*(time-pointer)
+		if travelled > dist:
+			if step < 1:
+				lower=int(pointer+1)
+				break
+			pointer -= step/2
+		else:
+			pointer += step/2
+		step /= 2
+
+	step = time/2
+	pointer = step
+	while True:
+		travelled = pointer*(time-pointer)
+		if travelled < dist:
+			if step < 1:
+				upper=int(pointer)
+				break
+			pointer -= step/2
+		else:
+			pointer += step/2
+		step /= 2
+
+	print()
+	print(lower, upper)
+	out = upper-(lower-1)
+	return out
+
+def day07_1(input_file):
+	lines = [line.strip("\n").split(" ") for line in open(input_file)]
+	def get_hand_value(hand):
+		"""returns the value of a hand"""
+		# 5	of	a	Kind
+		if len(set(hand)) == 1:
+			value='G'
+		# four of a kind
+		elif len(set(hand)) == 2:
+			if hand.count(hand[0]) == 4 or hand.count(hand[0]) == 1:
+				value='F'
+			# full house
+			else:
+				value='E'
+		# 3 of a kind
+		elif len(set(hand)) == 3:
+			if hand.count(hand[0]) == 3 or hand.count(hand[1]) == 3 or hand.count(hand[2]) == 3:
+				value='D'
+			# 2 pairs
+			else:
+				value='C'
+		# 1 pair
+		elif len(set(hand)) == 4:
+			value='B'
+		# high card
+		else:
+			value='A'
+
+		# values for cards in order: A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2
+		card_values = {
+			'2': 'a',
+			'3': 'b',
+			'4': 'c',
+			'5': 'd',
+			'6': 'e',
+			'7': 'f',
+			'8': 'g',
+			'9': 'h',
+			'T': 'i',
+			'J': 'j',
+			'Q': 'k',
+			'K': 'l',
+			'A': 'm'
+		}
+		for card in hand:
+			value += card_values[card]
+		
+		return value
+
+	lines = sorted(lines, key=lambda x: get_hand_value(x[0]))
+	
+	out = 0
+	multiplyer = 1
+	for line in lines:
+		#print(multiplyer, "*", int(line[1]))
+		out += multiplyer * int(line[1])
+		multiplyer += 1
+	return out
+
+def day07_2(input_file):
+	lines = [line.strip("\n").split(" ") for line in open(input_file)]
+	def get_hand_value(hand):
+		"""returns the value of a hand"""
+		# 5	of	a	Kind
+		if len(set(hand)) == 1 or (len(set(hand)) == 2 and "J" in hand):
+			value='G'
+		# four of a kind
+		elif len(set(hand)) == 2 or (len(set(hand)) == 3 and "J" in hand):
+			sub_set = list(set(filter(lambda a: a != "J", hand)))
+			jokers = hand.count("J")
+			
+			if hand.count(sub_set[0])+jokers == 4 or hand.count(sub_set[1])+jokers == 4:
+				value='F'
+			# full house
+			else:
+				value='E'
+		# 3 of a kind
+		elif len(set(hand)) == 3 or (len(set(hand)) == 4 and "J" in hand):
+			sub_set = list(set(filter(lambda a: a != "J", hand)))
+			jokers = hand.count("J")
+			
+			if hand.count(sub_set[0])+jokers == 3 or hand.count(sub_set[1])+jokers == 3 or hand.count(sub_set[2])+jokers == 3:
+				value='D'
+			# 2 pairs
+			else:
+				value='C'
+		# 1 pair
+		elif len(set(hand)) == 4 or (len(set(hand)) == 5 and "J" in hand):
+			value='B'
+		# high card
+		else:
+			value='A'
+
+		# values for cards in order: A, K, Q, T, 9, 8, 7, 6, 5, 4, 3, 2, J
+		card_values = {
+			'2': 'b',
+			'3': 'c',
+			'4': 'd',
+			'5': 'e',
+			'6': 'f',
+			'7': 'g',
+			'8': 'h',
+			'9': 'i',
+			'T': 'j',
+			'J': 'a',
+			'Q': 'k',
+			'K': 'l',
+			'A': 'm'
+		}
+		for card in hand:
+			value += card_values[card]
+		
+		return value
+
+	lines = sorted(lines, key=lambda x: get_hand_value(x[0]))
+	
+	out = 0
+	multiplyer = 1
+	for line in lines:
+		#print(multiplyer, "*", int(line[1]))
+		out += multiplyer * int(line[1])
+		multiplyer += 1
+	return out
+
+def get_function_name(day_number, part):
+	return f"day{day_number:02d}_{part}"
+
+@click.command()
+@click.argument('day_number', type=int)
+@click.argument('part', type=int)
+@click.argument('input_type', required=False, default='input', type=click.Choice(['input', 'test']))
+def main(day_number, part, input_type):
+	function_name = get_function_name(day_number, part)
+	function = globals().get(function_name)
+	if function:
+		input_file = f"day{day_number:02d}.tst" if input_type=="test" else f"day{day_number:02d}.txt"
+		print(f"Running day{day_number:02d}_{part} with input file: {input_file}")
+		print("Output:", function(input_file))
+
+
+if __name__ == '__main__':
+    main()
+
