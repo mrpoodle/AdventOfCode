@@ -261,22 +261,22 @@ def day05_2():
 	out = None
 	counter = 0
 
-	#for seed_range in seeds:
-	#	for seed in seed_range:
-	#		seed=find_location(seed, maps)
-	#		if out == None or seed < out:
-	#			out = seed
-	#		counter += 1
-	#		print(counter/length*100, "%    ", out, " "*30, end="\r")
-			
-	print(maximum)
-	for seed_range in [range(maximum)]:
+	for seed_range in seeds:
 		for seed in seed_range:
 			seed=find_location(seed, maps)
 			if out == None or seed < out:
 				out = seed
 			counter += 1
-			print(counter/maximum*100, "%    ", out, " "*30, end="\r")
+			print(counter/length*100, "%    ", out, " "*30, end="\r")
+			
+	#print(maximum)
+	#for seed_range in [range(maximum)]:
+	#	for seed in seed_range:
+	#		seed=find_location(seed, maps)
+	#		if out == None or seed < out:
+	#			out = seed
+	#		counter += 1
+	#		print(counter/maximum*100, "%    ", out, " "*30, end="\r")
 			
 	print()
 	return out
