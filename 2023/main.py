@@ -1,3 +1,4 @@
+from itertools import cycle
 import click
 
 def day01_1(input_file):
@@ -459,6 +460,96 @@ def day07_2(input_file):
 		out += multiplyer * int(line[1])
 		multiplyer += 1
 	return out
+
+def day08_1(input_file):
+	lines = [[element.strip(")(,") for element in line.strip("\n").split(" ")] for line in open(input_file)]
+	lines = filter(lambda x: x[0].startswith("#") == False , lines)
+	instructions = None
+	map = {}
+	for line in lines:
+		if not instructions:
+			instructions = line[0]
+			continue
+		if line[0] == "":
+			continue
+		map[line[0]] = (line[2], line[3])
+
+	current = "AAA"
+	steps = 0
+	for i in cycle(instructions):
+		if current == "ZZZ":
+			break
+		steps += 1
+		if i == "L":
+			current = map[current][0]
+		elif i == "R":
+			current = map[current][1]
+	return steps
+
+
+def day08_2(input_file):
+	lines = [[element.strip(")(,") for element in line.strip("\n").split(" ")] for line in open(input_file)]
+	lines = filter(lambda x: x[0].startswith("#") == False , lines)
+	instructions = None
+	map = {}
+	for line in lines:
+		if not instructions:
+			instructions = line[0]
+			continue
+		if line[0] == "":
+			continue
+		map[line[0]] = (line[2], line[3])
+
+	current = [key for key in map.keys() if key[-1] == "A"]
+	steps = 0
+	min_set = 0
+	print(len(current))
+	for i in cycle(instructions):
+		if set([node[-1] for node in current]) == set(["Z"]):
+			break
+		elif [node[-1] for node in current].count("Z") > min_set:
+			min_set = [node[-1] for node in current].count("Z")
+			print(min_set, steps)
+		steps += 1
+		for j, state in enumerate(current):
+			# print("state:", state)
+			if i == "L":
+				current[j] = map[state][0]
+			elif i == "R":
+				current[j] = map[state][1]
+	return steps
+
+def day38_2(input_file):
+	lines = [[element.strip(")(,") for element in line.strip("\n").split(" ")] for line in open(input_file)]
+	lines = filter(lambda x: x[0].startswith("#") == False , lines)
+	instructions = None
+	map = {}
+	for line in lines:
+		if not instructions:
+			instructions = line[0]
+			continue
+		if line[0] == "":
+			continue
+		map[line[0]] = (line[2], line[3])
+
+	current = [key for key in map.keys() if key[-1] == "A"]
+	print(len(current))
+	for c in current:
+		loops = []
+		steps = 0
+		for i in cycle(instructions):
+			if c.endswith("Z"):
+				for loop in loops:
+					if steps%loop == 0:
+						print(c, loop, steps)
+						break
+			
+			steps += 1
+			if i == "L":
+				c = map[c][0]
+			elif i == "R":
+				c = map[c][1]
+		print(c, steps)
 
 def get_function_name(day_number, part):
 	return f"day{day_number:02d}_{part}"
