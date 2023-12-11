@@ -1,4 +1,4 @@
-from itertools import cycle
+from itertools import cycle, combinations
 import math
 import click
 
@@ -658,6 +658,8 @@ def blow_up(lines):
             s_line_index = lines.index(line)
             s_line = list("-".join(line))
             s_index = s_line.index("S")
+            print(len(line))
+            print(s_index)
             if s_line[s_index+2] in "LF|.":
                 s_line[s_index+1]="."
             if s_line[s_index-2] in "J7|.":
@@ -666,12 +668,14 @@ def blow_up(lines):
         else:
             new_lines.append(list("-".join(line)))
         new_lines.append(list(".".join("|" for x in line)))
+    print(s_index)
     if s_line_index > 1:
-        if new_lines[s_line_index-2][s_index*2] in "JL-.":
-            new_lines[s_line_index-1][s_index*2]="."
+        print(s_index)
+        if new_lines[s_line_index-2][s_index] in "JL-.":
+            new_lines[s_line_index-1][s_index]="."
     if s_line_index < len(new_lines)-2:
-        if new_lines[s_line_index+2][s_index*2] in "F7-.":
-            new_lines[s_line_index+1][s_index*2]="."
+        if new_lines[s_line_index+2][s_index] in "F7-.":
+            new_lines[s_line_index+1][s_index]="."
     return new_lines
 
 def blow_down(lines):
@@ -689,7 +693,7 @@ def day10_2(input_file):
     lines = [list(line.strip("\n")) for line in open(input_file) if not line.startswith("#")]
     #print("\n".join(["".join(line) for line in lines]))
     lines = blow_up(lines)
-    #print("\n".join(["".join(line) for line in lines]))
+    print("\n".join(["".join(line) for line in lines]))
     for row,line in enumerate(lines):
         if "S" in line:
             start_y = row
@@ -721,6 +725,47 @@ def day10_2(input_file):
     #print("\n".join(new_lines))
     return "".join(new_lines).count(" ")
 
+def expand(lines):
+    # duplicate empty lines
+    new_lines = []
+    for i, line in enumerate(lines):
+        if set(line) == {"."}:
+            new_lines.append(line)
+        new_lines.append(line)
+
+    # turn lines
+    turned_lines = ["" for x in new_lines[0]]
+    for i, line in enumerate(new_lines):
+        for j, char in enumerate(line):
+            turned_lines[j] += char
+
+    # duplicate empty lines and turn
+    expanded_lines =  ["" for x in turned_lines[0]]
+    for i, line in enumerate(turned_lines):
+        if set(line) == {"."}:
+            for j, char in enumerate(line):
+                expanded_lines[j] += char*2
+        else:
+            for j, char in enumerate(line):
+                expanded_lines[j] += char
+    return expanded_lines
+
+def day11_1(input_file):
+    lines = [line.strip("\n") for line in open(input_file)]
+    lines = expand(lines)
+
+    galaxies = []
+    for i, line in enumerate(lines):
+        for char in line:
+            if char == "#":
+                galaxies.append((i, line.index(char)))
+    dist = 0
+    paths = 0
+    for pair in combinations(galaxies, 2):
+        paths += 1
+        dist += abs(pair[0][0]-pair[1][0])+abs(pair[0][1]-pair[1][1])
+    print(paths)
+    return dist
 
 def get_function_name(day_number, part):
     return f"day{day_number:02d}_{part}"
