@@ -27,7 +27,7 @@ def main(day_number, part, input_type):
     function_name = get_function_name(day_number, part)
     function = globals().get(function_name)
     if function:
-        input_file = f"inputs/day{day_number:02d}.tst" if input_type=="test" else f"day{day_number:02d}.txt"
+        input_file = f"inputs/day{day_number:02d}.tst" if input_type=="test" else f"inputs/day{day_number:02d}.txt"
         print(f"Running day{day_number:02d}_{part} with input file: {input_file}")
         print("Output:", function(input_file))
     else:
