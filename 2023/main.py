@@ -27,12 +27,15 @@ def get_function_name(day_number, part):
 @click.argument('day_number', type=int)
 @click.argument('part', type=click.Choice(["0", "1", "2"]), default="0", required=False)
 @click.argument('input_type', required=False, default='input', type=click.Choice(['input', 'test']))
-def main(day_number, part, input_type):
+@click.option('--manual_input', '-i', type=click.Path(exists=True) , required=False, default=None)
+def main(day_number, part, input_type, manual_input):
     function_names = get_function_name(day_number, part)
     for function_name in function_names:
         function = globals().get(function_name)
         if function:
             input_file = f"inputs/day{day_number:02d}.tst" if input_type=="test" else f"inputs/day{day_number:02d}.txt"
+            if manual_input:
+                input_file = manual_input
             print(f"\nRunning {function_name} with input file: {input_file}")
             print("Output:", function(input_file))
         else:

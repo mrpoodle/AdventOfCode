@@ -1,73 +1,97 @@
 ### for day 14
-import re, sys
 from tqdm import tqdm
 
 def read_input(input_file):
-    # . operational
-    # # damaged
-    # ? unknown
     lines = [line.strip("\n") for line in open(input_file)]
-    springs = []
-    for line in lines:
-        status, groups = line.split(" ")
-        springs.append([status, [int(i) for i in groups.split(",")]])
+    data = reversed([list(i) for i in zip(*lines)])
+    return list(data)
 
-    return springs
 
-def check_status(new_status, status, groups):
-    possible_groups = [len(group) for group in re.split("\.+", new_status) if group != ""]
-    # print(status, groups, possible_groups)
-    if len(possible_groups) > len(groups):
-        return False
-    for i, group in enumerate(possible_groups):
-        if i == len(possible_groups)-1:
-            if group < groups[i] and new_status[-1] == "#":
-                continue
-            elif group == groups[i]:
-                continue
-            else:
-                return False
-        if group != groups[i]:
-            return False
-    rest = groups[len(possible_groups):]
-    length_rest = sum(rest) + len(rest)-1
-    if length_rest + len(new_status) > len(status):
-        return False
-    return True
-
-def test_groups(status, groups):
-    possible_status = [""]
-    for char in tqdm(status, desc=" char", position=1, leave=False):
-        sys.stderr.flush()
-        if char == "." or char == "#":
-            possible_status = [s+char for s in possible_status if check_status(s+char, status, groups)]
-        elif char == "?":
-            possible_status = [s+"." for s in possible_status if check_status(s+".", status, groups)] + [s+"#" for s in possible_status if check_status(s+"#", status, groups)]
-    counter = 0
-    for s in tqdm(possible_status, desc=" chek", position=1, leave=False):
-        possible_groups = [len(group) for group in re.split("\.+", s) if group != ""]
-        if possible_groups == groups:
-            counter += 1
-    return counter
-
+def rearrange(data):
+    for d in data:
+        d = "".join(d)
+        spaces = d.split("#")
+        spaces = ["".join(sorted(space, reverse=True)) for space in spaces]
+        arranged = "#".join(spaces)
+        yield arranged
 
 def part_1(input_file):
     # read data
-    springs = read_input(input_file)
+    data = read_input(input_file)
+    # data[0][0] is NE
 
     out = 0
-    for status, groups in springs:  # tqdm(springs):
-        out+= test_groups(status, groups)
+    for arranged in rearrange(data):
+        for i, field in enumerate(arranged):
+            if field == "O":
+                out += len(arranged)-i
     return out
+
+def rotate_90_clockwise(data):
+    return [list(reversed(i)) for i in zip(*data)]
+
+def print_north(data):
+    print_west(rotate_90_clockwise(data))
+
+def print_east(data):
+    print_north(rotate_90_clockwise(data))
+
+def print_south(data):
+    print_east(rotate_90_clockwise(data))
+
+def print_west(data):
+    for line in data:
+        print("".join(line))
+    print()
+
+def print_north_up(data, dir):
+    if dir == "A":
+        print_north(data)
+    elif dir == "<":
+        print_west(data)
+    elif dir == "V":
+        print_south(data)
+    elif dir == ">":
+        print_east(data)
+
+def rearrangment_cycle(data):
+    #print(". initial")
+    #print_north(data)
+    for dir in ["A", "<", "V", ">"]:
+        data = list(rearrange(data))
+        #print(dir)
+        #print_north_up(data, dir)
+        data = rotate_90_clockwise(data)
+    return data
+
 
 def part_2(input_file):
     # read data
-    springs = read_input(input_file)
+    data = read_input(input_file)
+    # data[0][0] is NE
 
+    previous = []
     out = 0
-    for status, groups in tqdm(springs, desc=" line", position=0):
-        status = (status+"?")*5
-        out+= test_groups(status[:-1], groups*5)
-    print(" "*40)
+    loads = []
+    cycles = 1000000000
+    for i in range(cycles):
+        if data in previous:
+            # print(f"cycle found at {i-1} from {previous.index(data)}")
+            # print(loop)
+            # print(cycles-1-(previous.index(data)))
+            # print((cycles-1-previous.index(data))%len(loop)+1)
+            # print(loop[(cycles-1-previous.index(data))%(len(loop)+1)])
+            loop = loads[previous.index(data):-1]
+            out = loop[(cycles-1-previous.index(data))%(len(loop)+1)]
+            break
+        previous.append(data)
+        data = list(rearrangment_cycle(data))
+
+        load = 0
+        for d in data:
+            for j, field in enumerate(d):
+                if field == "O":
+                    load += len(d)-j
+        loads.append(load)
     return out
 
