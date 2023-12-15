@@ -16,6 +16,7 @@ from scripts.day02 import part_1 as day02_1, part_2 as day02_2
 from scripts.day03 import part_1 as day03_1, part_2 as day03_2
 from scripts.day13 import part_1 as day13_1, part_2 as day13_2
 from scripts.day14 import part_1 as day14_1, part_2 as day14_2
+from scripts.day15 import part_1 as day15_1, part_2 as day15_2
 
 def get_function_name(day_number, part):
     if part == "0":
