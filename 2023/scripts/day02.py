@@ -1,4 +1,4 @@
-### for day 00
+### for day 02
 
 balls_1 = {
     "red": 12,

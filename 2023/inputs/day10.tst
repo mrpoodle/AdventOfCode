@@ -1,8 +1,3 @@
-#7-F7-
-#.FJ|7
-#SJLL7
-#|F--J
-#LJ.LJ
 FF7FSF7F7F7F7F7F---7
 L|LJ||||||||||||F--J
 FL-7LJLJ||||||LJL-77

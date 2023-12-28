@@ -1,4 +1,4 @@
-### for day 00
+### for day 01
 
 numbers = {
     "one": "one1one",

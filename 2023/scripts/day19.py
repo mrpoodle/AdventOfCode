@@ -2,6 +2,7 @@
 
 def read_input(input_file):
     lines = [line.strip("\n") for line in open(input_file)]
+    # split on empty line
 
     ## Do whatever with the lines
 
@@ -10,6 +11,7 @@ def read_input(input_file):
 def part_1(input_file):
     # read data
     data = read_input(input_file)
+    # process starting with "in"y
 
     out = "Not implemented yet"
     # process and compute out

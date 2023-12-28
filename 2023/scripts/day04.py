@@ -1,4 +1,4 @@
-### for day 00
+### for day 04
 
 def read_input(input_file):
     lines = [line.strip("\n") for line in open(input_file)]
