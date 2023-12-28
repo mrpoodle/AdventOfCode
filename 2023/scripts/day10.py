@@ -1,7 +1,7 @@
 ### for day 10
 
 def read_input(input_file):
-    lines = [line.strip("\n") for line in open(input_file)]
+    lines = [list(line.strip("\n")) for line in open(input_file)]
 
     ## Do whatever with the lines
 

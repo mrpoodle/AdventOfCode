@@ -26,7 +26,7 @@ def part_2(input_file):
                     for line in open(input_file)]
 
     cards = [1 for x in lines]
-    print(cards)
+    # print(cards)
     for i, line in enumerate(lines):
         points = len(line[0] & line[1])
         for x in range(points):
@@ -34,6 +34,6 @@ def part_2(input_file):
                 cards[i+x+1] += cards[i]
             except IndexError:
                 pass
-    print(cards)
+    # print(cards)
     out = sum(cards)
     return out
