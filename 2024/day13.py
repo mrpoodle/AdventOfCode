@@ -38,7 +38,7 @@ def simple_test():
     B = (Y*xA - X*yA)/(yB*xA - xB*yA)
     A = (X - B*xB)/xA
 
-    print("Test 1: ", A, B, " Expected: 100 50")
+    print("Test 0: ", A, B)
 
 def solve(X,Y,xA,yA,xB,yB):
     B = (Y*xA - X*yA)/(yB*xA - xB*yA)
