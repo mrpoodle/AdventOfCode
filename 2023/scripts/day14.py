@@ -82,6 +82,7 @@ def part_2(input_file):
             # print((cycles-1-previous.index(data))%len(loop)+1)
             # print(loop[(cycles-1-previous.index(data))%(len(loop)+1)])
             loop = loads[previous.index(data):-1]
+            # A B C D E F "G" H I J "G" H I ....
             out = loop[(cycles-1-previous.index(data))%(len(loop)+1)]
             break
         previous.append(data)
